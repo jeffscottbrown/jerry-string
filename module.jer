@@ -221,3 +221,14 @@ fn join(parts: string[], sep: string): string {
     }
     return result;
 }
+
+fn lower_str(s: string): string {
+    let result: string = "";
+    let i: int = 0;
+    let n: int = len(s);
+    while (i < n) {
+        result = result + char_to_string(to_lower(char_at(s, i)));
+        i = i + 1;
+    }
+    return result;
+}
