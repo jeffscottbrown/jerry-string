@@ -1,0 +1,57 @@
+// ── Character classification ──────────────────────────────────────────────────
+// All functions here operate on raw ASCII char codes (int), not strings.
+// Use char_at(s, i) to get a char code from a string.
+
+// Returns true if c is an ASCII digit (0–9).
+fn is_digit(c: int): bool {
+    return c >= 48 && c <= 57;   // '0'..'9'
+}
+
+// Returns true if c is an ASCII letter (A–Z or a–z).
+fn is_alpha(c: int): bool {
+    return (c >= 65 && c <= 90) || (c >= 97 && c <= 122);  // A-Z, a-z
+}
+
+// Returns true if c is an ASCII letter or digit; combines is_alpha and is_digit.
+fn is_alnum(c: int): bool {
+    return is_digit(c) || is_alpha(c);
+}
+
+// Returns true if c is an ASCII whitespace character (space, tab, \n, \r).
+fn is_whitespace(c: int): bool {
+    return c == 32 || c == 9 || c == 10 || c == 13;
+}
+
+// Returns true if c is an uppercase ASCII letter (A–Z).
+// To test for lowercase use is_lower; to convert use to_upper.
+fn is_upper(c: int): bool {
+    return c >= 65 && c <= 90;
+}
+
+// Returns true if c is a lowercase ASCII letter (a–z).
+// To test for uppercase use is_upper; to convert use to_lower.
+fn is_lower(c: int): bool {
+    return c >= 97 && c <= 122;
+}
+
+// ── Character conversion ──────────────────────────────────────────────────────
+
+// Converts an uppercase ASCII char code to its lowercase equivalent.
+// Returns c unchanged if it is not an uppercase letter.
+// Operates on a single char code (int → int). To lowercase a whole string use lower_str.
+fn to_lower(c: int): int {
+    if is_upper(c) {
+        return c + 32;
+    }
+    return c;
+}
+
+// Converts a lowercase ASCII char code to its uppercase equivalent.
+// Returns c unchanged if it is not a lowercase letter.
+// Operates on a single char code (int → int).
+fn to_upper(c: int): int {
+    if is_lower(c) {
+        return c - 32;
+    }
+    return c;
+}

@@ -1,45 +1,6 @@
-// ── Character classification ──────────────────────────────────────────────────
-
-fn is_digit(c: int): bool {
-    return c >= 48 && c <= 57;   // '0'..'9'
-}
-
-fn is_alpha(c: int): bool {
-    return (c >= 65 && c <= 90) || (c >= 97 && c <= 122);  // A-Z, a-z
-}
-
-fn is_alnum(c: int): bool {
-    return is_digit(c) || is_alpha(c);
-}
-
-fn is_whitespace(c: int): bool {
-    return c == 32 || c == 9 || c == 10 || c == 13;  // space, tab, \n, \r
-}
-
-fn is_upper(c: int): bool {
-    return c >= 65 && c <= 90;
-}
-
-fn is_lower(c: int): bool {
-    return c >= 97 && c <= 122;
-}
-
-fn to_lower(c: int): int {
-    if is_upper(c) {
-        return c + 32;
-    }
-    return c;
-}
-
-fn to_upper(c: int): int {
-    if is_lower(c) {
-        return c - 32;
-    }
-    return c;
-}
-
 // ── String inspection ─────────────────────────────────────────────────────────
 
+// Returns true if s begins with prefix.
 fn starts_with(s: string, prefix: string): bool {
     let slen: int = len(s);
     let plen: int = len(prefix);
@@ -56,6 +17,7 @@ fn starts_with(s: string, prefix: string): bool {
     return true;
 }
 
+// Returns true if s ends with suffix.
 fn ends_with(s: string, suffix: string): bool {
     let slen: int = len(s);
     let suflen: int = len(suffix);
@@ -73,7 +35,9 @@ fn ends_with(s: string, suffix: string): bool {
     return true;
 }
 
-// Returns the index of the first occurrence of needle in s, or -1.
+// Returns the index of the first occurrence of needle in s, or -1 if not found.
+// An empty needle always returns 0.
+// Use contains when you only need a yes/no answer.
 fn index_of(s: string, needle: string): int {
     let slen: int = len(s);
     let nlen: int = len(needle);
@@ -99,12 +63,16 @@ fn index_of(s: string, needle: string): int {
     return -1;
 }
 
+// Returns true if needle appears anywhere in s.
+// Wraps index_of; prefer this when you don't need the position.
 fn contains(s: string, needle: string): bool {
     return index_of(s, needle) >= 0;
 }
 
 // ── String transformation ─────────────────────────────────────────────────────
 
+// Strips leading (left-side) whitespace from s; trailing whitespace is left intact.
+// Use trim_right for trailing only, or trim for both ends.
 fn trim_left(s: string): string {
     let i: int = 0;
     let n: int = len(s);
@@ -114,6 +82,8 @@ fn trim_left(s: string): string {
     return string_slice(s, i, n);
 }
 
+// Strips trailing (right-side) whitespace from s; leading whitespace is left intact.
+// Use trim_left for leading only, or trim for both ends.
 fn trim_right(s: string): string {
     let n: int = len(s);
     let i: int = n - 1;
@@ -123,10 +93,12 @@ fn trim_right(s: string): string {
     return string_slice(s, 0, i + 1);
 }
 
+// Strips both leading and trailing whitespace from s.
 fn trim(s: string): string {
     return trim_left(trim_right(s));
 }
 
+// Returns s concatenated n times; returns an empty string when n <= 0.
 fn repeat(s: string, n: int): string {
     let result: string = "";
     let i: int = 0;
@@ -137,9 +109,24 @@ fn repeat(s: string, n: int): string {
     return result;
 }
 
+// Converts every ASCII uppercase letter in s to lowercase; returns a new string.
+// Operates on a full string (string → string). For a single char code use to_lower (in char.jer).
+fn lower_str(s: string): string {
+    let result: string = "";
+    let i: int = 0;
+    let n: int = len(s);
+    while (i < n) {
+        result = result + char_to_string(to_lower(char_at(s, i)));
+        i = i + 1;
+    }
+    return result;
+}
+
 // ── Splitting ─────────────────────────────────────────────────────────────────
 
-// Split s on every occurrence of sep; returns array of parts.
+// Splits s on every exact occurrence of sep and returns the parts as an array.
+// An empty sep splits s into individual single-character strings.
+// Use split_whitespace to split on any run of whitespace without a fixed separator.
 fn split(s: string, sep: string): string[] {
     let parts: string[] = [];
     let slen: int = len(s);
@@ -180,7 +167,8 @@ fn split(s: string, sep: string): string[] {
     return parts;
 }
 
-// Split on any whitespace run; trims leading/trailing whitespace first.
+// Splits s on any run of whitespace, ignoring leading and trailing whitespace.
+// Unlike split(s, " "), consecutive spaces count as a single separator.
 fn split_whitespace(s: string): string[] {
     let parts: string[] = [];
     let n: int = len(s);
@@ -208,6 +196,8 @@ fn split_whitespace(s: string): string[] {
 
 // ── Joining ───────────────────────────────────────────────────────────────────
 
+// Concatenates all strings in parts with sep inserted between each adjacent pair.
+// An empty parts array returns an empty string.
 fn join(parts: string[], sep: string): string {
     let result: string = "";
     let i: int = 0;
@@ -218,17 +208,6 @@ fn join(parts: string[], sep: string): string {
         }
         result = result + parts[i];
         i++;
-    }
-    return result;
-}
-
-fn lower_str(s: string): string {
-    let result: string = "";
-    let i: int = 0;
-    let n: int = len(s);
-    while (i < n) {
-        result = result + char_to_string(to_lower(char_at(s, i)));
-        i = i + 1;
     }
     return result;
 }
